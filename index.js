@@ -3,15 +3,6 @@ const { Client } = require("discord.js")
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const config = require('./config.json')
-client.on("message", async message => {
-  const regex = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|club)|discordapp\.com\/invite|discord\.com\/invite)\/.+[a-z]/gi;
-  if (regex.exec(message.content)) {
-    await message.delete({timeout: 1000});
-      await message.channel.send(
-        `${message.author} **você não pode postar link de outros servidores aqui!**`
-      );
-  }
-});
   client.on('message', message => {
     if (message.author.bot) return;
     if (message.channel.type == 'dm') return;
@@ -43,4 +34,4 @@ console.log("Estou Online!")
 });
 
 
-client.login(process.env.TOKEN)
+client.login("NzA1MDUzNjMyOTYxNDQ2MDA4.XuJEyQ.uqYpeymrm08jr4ij1sABrjYSrzE")

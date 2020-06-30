@@ -4,6 +4,7 @@ const { Client } = require("discord.js")
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const config = require('./config.json')
+require('dotenv').config()
   client.on('message', message => {
     if (message.author.bot) return;
     if (message.channel.type == 'dm') return;
@@ -35,4 +36,4 @@ console.log("Estou Online!")
 });
 
 
-client.login('NzA1MDUzNjMyOTYxNDQ2MDA4.XvqBSA.CMgWe9HYoCDLq5IGCiH6VVGblxA')
+client.login(process.env.TOKEN)

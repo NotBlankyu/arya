@@ -34,4 +34,4 @@ console.log("Estou Online!")
 });
 
 
-client.login("NzA1MDUzNjMyOTYxNDQ2MDA4.XuJEyQ.uqYpeymrm08jr4ij1sABrjYSrzE")
+client.login(process.env.TOKEN)

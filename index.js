@@ -1,8 +1,10 @@
+
 const { Client } = require("discord.js")
 
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const config = require('./config.json')
+require('dotenv').config()
   client.on('message', message => {
     if (message.author.bot) return;
     if (message.channel.type == 'dm') return;
@@ -25,11 +27,15 @@ const config = require('./config.json')
 client.on("ready", () => {
   let activity = "Lo-fi."
   let type = 'LISTENING'
-  client.user.setActivity(activity, { type: type })
-  .catch(console.error);
-  client.user
-      .setStatus("dnd") // idle, dnd, online, invisible
-      .catch(console.error);
+  client.user.setPresence(({
+    status: 'dnd',
+    activity: {
+        name: activity,
+        type: type,
+    }
+}))
+  
+  
 console.log("Estou Online!")
 });
 

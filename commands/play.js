@@ -37,7 +37,12 @@ module.exports.run = async (client, message, args) => {
         play(connection,message)    
         message.channel.send("Playing!")
         }else message.channel.send("Added to queue!")
-       })
+       }).catch(err => 
+        {
+          message.channel.send("Make sure i have the permissions to join!")
+          server.queue.shift();  
+        })
+      
        module.exports.Skip = function(){
         if(server.dispatcher) server.dispatcher.end();
     }

@@ -66,8 +66,9 @@ module.exports.run = async (client, message, args) => {
         if(server.dispatcher) server.dispatcher.end();
     }
        module.exports.queue = function(){  
-        if(server.queue){
+        
           async function queue() {
+          if(!server.queue[0])return message.channel.send('No queue right now')
           var queue =''
           var msg = await message.channel.send(`Fetching queue info...`);
           for(var i = 0; i < server.queue.length; ++i){
@@ -82,7 +83,7 @@ module.exports.run = async (client, message, args) => {
             
         }
         queue();
-      }
+     
       }   
       module.exports.loopAll = function(){
         function loopAll() { 
@@ -111,3 +112,7 @@ module.exports.run = async (client, message, args) => {
       
         
   }
+  module.exports.noQueue = function(message){  
+message.channel.send('No queue right now')
+
+}   

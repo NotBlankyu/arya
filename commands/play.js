@@ -107,7 +107,15 @@ module.exports.run = async (client, message, args) => {
           }
           loopOff()
         }
-        
+        module.exports.pause = function(guild){  
+          var server = servers[guild];
+        if(server.dispatcher) server.dispatcher.pause();
+          } 
+        module.exports.resume = function(guild){  
+          var server = servers[guild];
+          if(server.dispatcher) server.dispatcher.resume();
+            } 
+            
         
       
         

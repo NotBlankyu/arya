@@ -10,14 +10,10 @@ module.exports.run = async (client, message, args) => {
         var loopQueue = loop[message.guild.id];
         if(loopQueue.queue[0]){
           server.dispatcher = connection.play(ytdl(loopQueue.queue[0]), {filter:"audioonly"},{highWaterMark: 1<<25});
-          console.log('1')
         }else{
         server.dispatcher = connection.play(ytdl(server.queue[0]), {filter:"audioonly"},{highWaterMark: 1<<25});
         }
         server.dispatcher.on("finish",function(){
-          console.log(loopQueue.queue)
-          console.log(loopQueue.queue[0])
-          console.log(server.queue[0])
           if(loopQueue.queue[0]){
             loopQueue.queue.push(loopQueue.queue[0])
             loopQueue.queue.shift()
@@ -69,10 +65,7 @@ module.exports.run = async (client, message, args) => {
         var server = servers[guild];
         if(server.dispatcher) server.dispatcher.end();
     }
-       module.exports.queue = function(){
-        let list = ''
-        let name
-        
+       module.exports.queue = function(){  
         if(server.queue){
           async function queue() {
           var queue =''

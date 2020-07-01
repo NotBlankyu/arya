@@ -21,7 +21,7 @@ require('dotenv').config()
        
        commandFile.run(client, message, args);
    } catch (err) {
-    console.log(err).then(message.channel.send("I can't find this command ``"+`${command}`+'``.'))
+    message.channel.send("I can't find this command ``"+`${command}`+'``.')
  }
 });
 client.on("ready", () => {

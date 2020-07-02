@@ -8,6 +8,7 @@ module.exports.run = async (client, message, args) => {
         case "single" :music.loopSingle()
           break;
         case "all" : music.loopAll()
-          break;    
+          break; 
+        default: message.channel.send('use !loop all/single/off')   
     }
   }

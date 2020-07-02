@@ -1,9 +1,12 @@
 const ytdl = require('ytdl-core');
 const Discord = require('discord.js')
+const db = require('quick.db')
 var servers = {}
 var loop = {}
 module.exports.run = async (client, message, args) => {
-  
+  if(!db.get(`guild_${message.guild.id}`)){
+    db.set(`guild_${message.guild.id}`, { toggle: true })
+  }
     function play(connection, message){
         
         var server = servers[message.guild.id];
@@ -18,10 +21,15 @@ module.exports.run = async (client, message, args) => {
             loopQueue.queue.push(loopQueue.queue[0])
             loopQueue.queue.shift()
             play(connection,message)
-            message.channel.send("Playing next song!")
+            if(db.get(`guild_${message.guild.id}.toggle`)){
+              message.channel.send("Playing next song!")
+            }
+            
           }else if(server.queue[1]){
             server.queue.shift();
-            message.channel.send("Playing next song!")
+            if(db.get(`guild_${message.guild.id}.toggle`)){
+              message.channel.send("Playing next song!")
+            }
             play(connection, message);
           }else{
             connection.disconnect();
@@ -88,7 +96,6 @@ module.exports.run = async (client, message, args) => {
       module.exports.loopAll = function(){
         function loopAll() { 
           loopQueue.queue = server.queue.slice()
-          console.log(loopQueue)
           message.channel.send('Looping the entire queue')
         }
         loopAll()

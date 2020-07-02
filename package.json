@@ -5,9 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
+    "better-sqlite3": "^7.1.0",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
+    "quick.db": "^7.0.0-b22",
     "ytdl-core": "^2.1.7"
   },
   "devDependencies": {},

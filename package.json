@@ -9,12 +9,14 @@
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
+    "node-pre-gyp": "^0.15.0",
     "quick.db": "^7.0.0-b22",
     "ytdl-core": "^2.1.7"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js"
   },
   "keywords": [],
   "author": "",

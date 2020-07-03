@@ -54,8 +54,9 @@ module.exports.run = async (client, message, args) => {
       }
       var server = servers[message.guild.id];
       var loopQueue = loop[message.guild.id];
-      
+      if(!await ytdl.validateURL(args[0]))return message.channel.send('Use a valid youtube URL')
       server.queue.push(args[0]);
+      
         
       if(!message.guild.voiceConnection) message.member.voice.channel.join().then(function(connection){
         if(!server.queue[1]){

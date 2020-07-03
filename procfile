@@ -1,0 +1,1 @@
+release: node index.js

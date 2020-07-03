@@ -1,1 +1,1 @@
-web: node index.js
+release: node index.js

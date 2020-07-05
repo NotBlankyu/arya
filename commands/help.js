@@ -5,7 +5,7 @@ module.exports.run = async (client, message, args) => {
 const helpEmbed = new Discord.MessageEmbed()
     .setTitle('Help')
     .setDescription('Here you can find every\n command available right now!')
-    .addField('Commands','-play⠀⠀⠀⠀⠀⠀-pause\n-resume⠀⠀⠀⠀-queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help')
+    .addField('Commands','-play⠀⠀⠀⠀⠀⠀-pause\n-resume⠀⠀⠀⠀-queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-leave')
 message.channel.send(helpEmbed)
 
 

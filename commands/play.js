@@ -123,12 +123,23 @@ module.exports.run = async (client, message, args) => {
           var server = servers[guild];
           if(server.dispatcher) server.dispatcher.resume();
             } 
-            
-        
-      
+        module.exports.leave = function(message){
+          var server = servers[message.guild.id];
+          try {
+            if(message.guild.me.voice.channel){
+              server.queue = []
+              server.dispatcher.end();
+            }else{
+              
+              return message.channel.send("I'm not playing right now!")
+            }  
+          }catch (e){
+            console.log(e)
+          }
+          }
         
   }
   module.exports.noQueue = function(message){  
 message.channel.send('No queue right now')
 
-}   
+}  

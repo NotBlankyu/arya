@@ -3,7 +3,6 @@ const { Client } = require("discord.js")
 
 const Discord = require("discord.js")
 const client = new Discord.Client()
-const config = require('./config.json')
 require('dotenv').config()
 const prefix = process.env.PREFIX
   client.on('message', message => {

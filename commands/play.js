@@ -66,7 +66,7 @@ module.exports.run = async (client, message, args) => {
        }).catch(err => 
         {
           console.log(err)
-          message.channel.send("Make sure i have the permissions to join!")
+          message.channel.send("An error happen please make sure i have the permissions to join!")
           server.queue.shift();  
         })
       
@@ -74,7 +74,7 @@ module.exports.run = async (client, message, args) => {
         var server = servers[guild];
         if(server.dispatcher) server.dispatcher.end();
     }
-       module.exports.queue = function(){  
+       module.exports.queue = function(message){  
         
           async function queue() {
           if(!server.queue[0])return message.channel.send('No queue right now')
@@ -91,24 +91,24 @@ module.exports.run = async (client, message, args) => {
             msg.edit(embed)
             
         }
-        queue();
+        queue(message);
      
       }   
-      module.exports.loopAll = function(){
+      module.exports.loopAll = function(message){
         function loopAll() { 
           loopQueue.queue = server.queue.slice()
           message.channel.send('Looping the entire queue')
         }
         loopAll()
         }
-        module.exports.loopSingle = function(){
+        module.exports.loopSingle = function(message){
           function loopSingle() { 
           loopQueue.queue.push(server.queue[0])
           message.channel.send('Looping the current track')
           }
           loopSingle()
         }
-        module.exports.loopOff = function(){
+        module.exports.loopOff = function(message){
           function loopOff() { 
           loopQueue.queue = []
           message.channel.send('Loop off')

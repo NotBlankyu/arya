@@ -11,7 +11,8 @@
     "ffmpeg": "0.0.4",
     "node-pre-gyp": "^0.15.0",
     "quick.db": "^7.0.0-b22",
-    "ytdl-core": "^2.1.7"
+    "ytdl-core": "^2.1.7",
+    "ytsr": "^0.1.15"
   },
   "devDependencies": {},
   "scripts": {

@@ -12,6 +12,7 @@
     "node-pre-gyp": "^0.15.0",
     "quick.db": "^7.0.0-b22",
     "ytdl-core": "^2.1.7",
+    "ytpl": "^0.1.22",
     "ytsr": "^0.1.15"
   },
   "devDependencies": {},

@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr')
+const ytpl = require('ytpl')
 const Discord = require('discord.js')
 const db = require('quick.db')
 var servers = {}
@@ -56,21 +57,44 @@ module.exports.run = async (client, message, args) => {
       var server = servers[message.guild.id];
       var loopQueue = loop[message.guild.id];
       const searchArgs = args.join("")
-      if(!await ytdl.validateURL(args[0])){
+      let playlistID 
+      let test
+      async function addPlaylist(type){
+        ytpl(playlistID, function(err, playlist) {
+          if(err) throw err;
+          for(var i = 0; i < playlist.total_items; ++i){
+            server.queue.push(playlist.items[i].url);
+          }
+          if(playlist.total_items<server.queue.length){
+             test = 1
+          }else{
+            test = 2
+          }
+          console.log(test)
+        });
+      }
+      if(ytpl.validateURL(args[0])){
+        playlistID = await ytpl.getPlaylistID(args[0])
+        addPlaylist() 
+      }else if(!ytdl.validateURL(args[0])){
         searchResult = await ytsr(searchArgs);
         musicLink = searchResult.items[0].link
         server.queue.push(musicLink);
       }else{
         server.queue.push(args[0]);
       }
-      
-      
-        
+
       if(!message.guild.voiceConnection) message.member.voice.channel.join().then(function(connection){
         if(!server.queue[1]){
         play(connection,message)    
         message.channel.send("Playing!")
-        }else message.channel.send("Added to queue!")
+        }else if(2 == test){
+          play(connection,message)    
+        message.channel.send("Playing and added to the queue!")
+        }else {
+          message.channel.send("Added to the queue!")
+          
+        }
        }).catch(err => 
         {
           console.log(err)
@@ -136,6 +160,7 @@ module.exports.run = async (client, message, args) => {
           try {
             if(message.guild.me.voice.channel){
               server.queue = []
+              loopQueue.queue = []
               server.dispatcher.end();
             }else{
               

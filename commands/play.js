@@ -103,6 +103,7 @@ module.exports.run = async (client, message, args) => {
         })
       
        module.exports.Skip = function(guild){
+        if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
         var server = servers[guild];
         if(server.dispatcher) server.dispatcher.end();
     }
@@ -127,6 +128,7 @@ module.exports.run = async (client, message, args) => {
      
       }   
       module.exports.loopAll = function(message){
+        if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
         function loopAll() { 
           loopQueue.queue = server.queue.slice()
           message.channel.send('Looping the entire queue')
@@ -134,6 +136,7 @@ module.exports.run = async (client, message, args) => {
         loopAll()
         }
         module.exports.loopSingle = function(message){
+          if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
           function loopSingle() { 
           loopQueue.queue.push(server.queue[0])
           message.channel.send('Looping the current track')
@@ -141,6 +144,7 @@ module.exports.run = async (client, message, args) => {
           loopSingle()
         }
         module.exports.loopOff = function(message){
+          if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
           function loopOff() { 
           loopQueue.queue = []
           message.channel.send('Loop off')
@@ -149,13 +153,15 @@ module.exports.run = async (client, message, args) => {
         }
         module.exports.pause = function(guild){  
           var server = servers[guild];
-        if(server.dispatcher) server.dispatcher.pause();
+          if(server.dispatcher) server.dispatcher.pause();
           } 
         module.exports.resume = function(guild){  
+          if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
           var server = servers[guild];
           if(server.dispatcher) server.dispatcher.resume();
             } 
         module.exports.leave = function(message){
+          if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
           var server = servers[message.guild.id];
           try {
             if(message.guild.me.voice.channel){

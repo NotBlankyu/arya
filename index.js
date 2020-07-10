@@ -8,8 +8,8 @@ const prefix = process.env.PREFIX
   client.on('message', message => {
     if (message.author.bot) return;
     if (message.channel.type == 'dm') return;
-    if (!message.content.toLowerCase().startsWith(prefix)) return;
-    if (message.content.startsWith(`<@!${client.user.id}>`) || message.content.startsWith(`<@${client.user.id}>`)) return;
+    if (message.content.startsWith(`<@!${client.user.id}>`) || message.content.startsWith(`<@${client.user.id}>`)) return message.channel.send('Hi my prefix is a/');
+    if (!message.content.toLowerCase().startsWith(prefix)) return; 
 
    const args = message.content
        .trim().slice(prefix.length)

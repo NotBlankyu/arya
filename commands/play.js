@@ -26,13 +26,13 @@ module.exports.run = async (client, message, args) => {
             loopQueue.queue.push(loopQueue.queue[0])
             loopQueue.queue.shift()
             play(connection,message)
-            if(guild.toggle){
+            if(!guild.toggle){
               message.channel.send("Playing next song!")
             }
             
           }else if(server.queue[1]){
             server.queue.shift();
-            if(guild.toggle){
+            if(!guild.toggle){
               message.channel.send("Playing next song!")
             }
             play(connection, message);

@@ -19,11 +19,11 @@ Guild.findOne({
       message.channel.send('Playing next msg disabled')
     }else{
       if(guild.toggle){
-          guild.toggle = false
+          guild.toggle = true
           message.channel.send('Playing next msg disabled')
           guild.save().catch(err =>console.log(err));
       }else{
-          guild.toggle = true
+          guild.toggle = false
           message.channel.send('Playing next msg enabled')
           guild.save().catch(err =>console.log(err));
       }

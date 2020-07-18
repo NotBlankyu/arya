@@ -40,6 +40,6 @@ client.on("ready", () => {
   
 console.log("Estou Online!")
 });
-
-
+client.mongoose = require('./utils/mongoose');
+client.mongoose.init();
 client.login(process.env.TOKEN)

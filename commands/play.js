@@ -2,14 +2,16 @@ const ytdl = require('ytdl-core');
 const ytsr = require('ytsr')
 const ytpl = require('ytpl')
 const Discord = require('discord.js')
-const db = require('quick.db')
 var { getData } = require("spotify-url-info");
+const Guild = require('../models/guild');
 var servers = {}
 var loop = {}
 module.exports.run = async (client, message, args) => {
-  if(!db.get(`guild_${message.guild.id}`)){
-    db.set(`guild_${message.guild.id}`, { toggle: true })
-  }
+  guild = await Guild.findOne({ 
+    guildID: message.guild.id
+  }, (err, guild) => {
+    if(err) console.log(err);
+})
     function play(connection, message){
         
         var server = servers[message.guild.id];
@@ -24,13 +26,13 @@ module.exports.run = async (client, message, args) => {
             loopQueue.queue.push(loopQueue.queue[0])
             loopQueue.queue.shift()
             play(connection,message)
-            if(db.get(`guild_${message.guild.id}.toggle`)){
+            if(guild.toggle){
               message.channel.send("Playing next song!")
             }
             
           }else if(server.queue[1]){
             server.queue.shift();
-            if(db.get(`guild_${message.guild.id}.toggle`)){
+            if(guild.toggle){
               message.channel.send("Playing next song!")
             }
             play(connection, message);

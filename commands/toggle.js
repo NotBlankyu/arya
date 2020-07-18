@@ -1,17 +1,35 @@
 const Discord = require("discord.js");
-const db = require('quick.db')
+const mongoose = require('mongoose');
+const Guild = require('../models/guild');
 module.exports.run = async (client, message, args) => {
 if(!message.member.hasPermission('MANAGE_MESSAGE'))return message.channel.send("You don't seem to have enough permissions")
-if(db.get(`guild_${message.guild.id}`)){
-    if(db.get(`guild_${message.guild.id}.toggle`)){
-        db.set(`guild_${message.guild.id}`, { toggle: false })
-        message.channel.send('Playing next msg disabled')
-       }else{
-        db.set(`guild_${message.guild.id}`, { toggle: true })
-        message.channel.send('Playing next msg enabled')
-       }
-}else{
-    db.set(`guild_${message.guild.id}`, { toggle: false })
-    message.channel.send('Playing next msg disabled')
-}
+Guild.findOne({ 
+    guildID: message.guild.id
+  }, (err, guild) => {
+    if(err) console.log(err);
+    //if there isn't create it
+    if(!guild){
+      const newGuild = new Guild({
+    _id: mongoose.Types.ObjectId(),
+    guildID: message.guild.id,
+    guildName: message.guild.name,
+    toggle: false
+      })
+      newGuild.save().catch(err => console.log(err));
+      message.channel.send('Playing next msg disabled')
+    }else{
+      if(guild.toggle){
+          guild.toggle = false
+          message.channel.send('Playing next msg disabled')
+          guild.save().catch(err =>console.log(err));
+      }else{
+          guild.toggle = true
+          message.channel.send('Playing next msg enabled')
+          guild.save().catch(err =>console.log(err));
+      }
+      
+      
+
+  }
+})
     };

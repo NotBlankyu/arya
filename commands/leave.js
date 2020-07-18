@@ -1,8 +1,21 @@
 const Discord = require("discord.js");
 const ytdl = require('ytdl-core');
 const music = require('./play.js')
+const Guild = require('../models/guild');
 module.exports.run = async (client, message, args) => {
+  let guild = await Guild.findOne({ 
+    guildID: message.guild.id
+  }, (err, guild) => {
+    if(err) console.log(err);
+})
+if(guild.musicChannel){
+  if(message.channel.id != guild.musicChannel){
+    if(guild.musicChannel != "0" ){
+      return message.channel.send(`Please use this command in <#${guild.musicChannel}>`)
+    }
     
+  }
+}   
       
       if(!message.member.voice.channel){
        return message.channel.send("Please enter a channel.")

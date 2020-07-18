@@ -7,11 +7,19 @@ const Guild = require('../models/guild');
 var servers = {}
 var loop = {}
 module.exports.run = async (client, message, args) => {
-  guild = await Guild.findOne({ 
+  let guild = await Guild.findOne({ 
     guildID: message.guild.id
   }, (err, guild) => {
     if(err) console.log(err);
 })
+if(guild.musicChannel){
+  if(message.channel.id != guild.musicChannel){
+    if(guild.musicChannel != "0" ){
+      return message.channel.send(`Please use this command in <#${guild.musicChannel}>`)
+    }
+    
+  }
+}
     function play(connection, message){
         
         var server = servers[message.guild.id];

@@ -3,6 +3,7 @@ const ytsr = require('ytsr')
 const ytpl = require('ytpl')
 const Discord = require('discord.js')
 const db = require('quick.db')
+var { getData } = require("spotify-url-info");
 var servers = {}
 var loop = {}
 module.exports.run = async (client, message, args) => {
@@ -77,9 +78,20 @@ module.exports.run = async (client, message, args) => {
         playlistID = await ytpl.getPlaylistID(args[0])
         addPlaylist() 
       }else if(!ytdl.validateURL(args[0])){
-        searchResult = await ytsr(searchArgs);
-        musicLink = searchResult.items[0].link
-        server.queue.push(musicLink);
+        try{
+          data = await getData(args[0])
+          if(data){
+            searchResult = await ytsr(data.name+data.artists[0].name);
+            musicLink = searchResult.items[0].link
+            server.queue.push(musicLink);
+          }else{
+        }
+        }catch{
+          searchResult = await ytsr(searchArgs);
+          musicLink = searchResult.items[0].link
+          server.queue.push(musicLink);
+        }
+        
       }else{
         server.queue.push(args[0]);
       }

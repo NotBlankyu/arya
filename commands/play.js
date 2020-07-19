@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr')
-const ytpl = require('ytpl')
+const ytpl = require('arya-ytpl')
 const Discord = require('discord.js')
 var { getData } = require("spotify-url-info");
 const Guild = require('../models/guild');
@@ -90,7 +90,22 @@ if(guild.musicChannel){
       }else if(!ytdl.validateURL(args[0])){
         try{
           data = await getData(args[0])
-          if(data){
+          if(data.tracks){
+            message.channel.send('Loading tracks <a:8527_discord_loading:734395335446888529>')
+            for(var i = 0; i <10 && i < data.tracks.total ; ++i){
+              name = data.tracks.items[i].track.name
+              artist = data.tracks.items[i].track.artists[0].name
+              search = name+" "+artist
+              searchResult = await ytsr(search);
+              musicLink = await searchResult.items[0].link
+              server.queue.push(musicLink);
+              }
+              if(data.tracks.total<server.queue.length){
+                test = 1
+             }else{
+               test = 2
+             }
+          }else if(data){
             searchResult = await ytsr(data.name+data.artists[0].name);
             musicLink = searchResult.items[0].link
             server.queue.push(musicLink);
@@ -134,7 +149,7 @@ if(guild.musicChannel){
           async function queue() {
           if(!server.queue[0])return message.channel.send('No queue right now')
           var queue =''
-          var msg = await message.channel.send(`Fetching queue info...`);
+          var msg = await message.channel.send(`Fetching queue info <a:8527_discord_loading:734395335446888529>`);
           for(var i = 0; i < server.queue.length; ++i){
             const info = await ytdl.getInfo(server.queue[i]);
             queue += `${i + 1}. [${info.title}](${server.queue[i]})\n`;

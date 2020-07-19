@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const mongoose = require('mongoose');
 const Guild = require('../models/guild');
 module.exports.run = async (client, message, args) => {
-if(!message.member.hasPermission('MANAGE_MESSAGE'))return message.channel.send("You don't seem to have enough permissions(MANAGE_MESSAGE)")
+if(!message.member.hasPermission('MANAGE_MESSAGES'))return message.channel.send("You don't seem to have enough permissions(MANAGE_MESSAGES)")
 Guild.findOne({ 
     guildID: message.guild.id
   }, (err, guild) => {
@@ -18,7 +18,7 @@ Guild.findOne({
       newGuild.save().catch(err => console.log(err));
       message.channel.send('Playing next msg disabled')
     }else{
-      if(guild.toggle){
+      if(!guild.toggle){
           guild.toggle = true
           message.channel.send('Playing next msg disabled')
           guild.save().catch(err =>console.log(err));

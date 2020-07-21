@@ -15,7 +15,8 @@ module.exports.run = async (client, message, args) => {
         }
         
       }
-    }
+
+  }
     if(!message.member.voice.channel){
         return message.channel.send("Please enter a channel.")
        }

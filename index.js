@@ -1,6 +1,7 @@
 
 const { Client } = require("discord.js")
-
+const mongoose = require('mongoose');
+const Guild = require('./models/guild');
 const Discord = require("discord.js")
 const client = new Discord.Client()
 require('dotenv').config()
@@ -40,6 +41,28 @@ client.on("ready", () => {
   
 console.log("Estou Online!")
 });
+client.on("guildCreate", guild => {
+guild = new Guild({
+  _id: mongoose.Types.ObjectId(),
+  guildID: guild.id,
+  guildName: guild.name,
+});
+
+guild.save()
+.then(result => console.log(result))
+.catch(err => console.error(err));
+
+console.log('I have joined a new server!');
+
+});
+client.on("guildDelete", guild => {
+  Guild.findOneAndDelete({
+    guildID: guild.id
+}, (err, res) => {
+    if(err) console.error(err)
+    console.log('I have been removed from a server!');
+});
+  });
 client.mongoose = require('./utils/mongoose');
 client.mongoose.init();
 client.login(process.env.TOKEN)

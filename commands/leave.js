@@ -15,8 +15,7 @@ if(guild.musicChannel){
     }
     
   }
-}   
-      
+}       
       if(!message.member.voice.channel){
        return message.channel.send("Please enter a channel.")
       }

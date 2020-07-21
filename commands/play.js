@@ -19,6 +19,7 @@ if(guild.musicChannel){
     }
     
   }
+
 }
     function play(connection, message){
         
@@ -37,7 +38,7 @@ if(guild.musicChannel){
             if(!guild.toggle){
               message.channel.send("Playing next song!")
             }
-            
+
           }else if(server.queue[1]){
             server.queue.shift();
             if(!guild.toggle){

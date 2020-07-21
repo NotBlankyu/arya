@@ -87,9 +87,9 @@ if(guild.musicChannel){
         
       }
       async function queueingEmbed(){
-        const info = await ytdl.getInfo(server.queue[0]);
+        const info = await ytdl.getInfo(server.queue[server.queue.length - 1]);
         const playingEmbed = new Discord.MessageEmbed()
-        .setDescription(`Added [${info.title}](${server.queue[0]}) to the queue!`)
+        .setDescription(`Added [${info.title}](${server.queue[server.queue.length - 1]}) to the queue!`)
         message.channel.send(playingEmbed)/*.then(msg => {
           msg.delete({ timeout: 15000 });
         })*/
@@ -138,7 +138,6 @@ if(guild.musicChannel){
           searchResult = await ytsr(searchArgs);
           musicLink = searchResult.items[0].link
           server.queue.push(musicLink);
-          console.log(err)
         }
         
       }else{  

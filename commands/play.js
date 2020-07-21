@@ -36,7 +36,9 @@ if(guild.musicChannel){
             loopQueue.queue.shift()
             play(connection,message)
             if(!guild.toggle){
-              message.channel.send("Playing next song!")
+              message.channel.send("Playing next song!").then(msg => {
+                msg.delete({ timeout: 5000 });
+              })
             }
 
           }else if(server.queue[1]){

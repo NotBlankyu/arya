@@ -8,7 +8,7 @@ module.exports.run = async (client, message, args) => {
       }, (err, guild) => {
         if(err) console.log(err);
     })
-
+    if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
     if(guild.musicChannel){
       if(message.channel.id != guild.musicChannel){
         if(guild.musicChannel != "0" ){

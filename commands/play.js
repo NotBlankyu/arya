@@ -36,28 +36,19 @@ if(guild.musicChannel){
             loopQueue.queue.shift()
             play(connection,message)
             if(!guild.toggle){
-              const info = await ytdl.getInfo(server.queue[0]);
-              const playingEmbed = new Discord.MessageEmbed()
-              .setDescription(`Playing [${info.title}](${server.queue[0]})`)
-              message.channel.send(playingEmbed)/*.then(msg => {
-                msg.delete({ timeout: 15000 });
-              })*/
+              playingEmbed()
             }
 
           }else if(server.queue[1]){
             server.queue.shift();
             if(!guild.toggle){
-              const info = await ytdl.getInfo(server.queue[0]);
-              const playingEmbed = new Discord.MessageEmbed()
-              .setDescription(`Playing [${info.title}](${server.queue[0]})`)
-              message.channel.send(playingEmbed)/*.then(msg => {
-                msg.delete({ timeout: 15000 });
-              }) */
+              playingEmbed()
             }
             play(connection, message);
           }else{
             connection.disconnect();
             server.queue.shift();
+            server.toDelete = []
             message.channel.send("Finished the queue leaving the channel now.")
           }
        });
@@ -71,7 +62,8 @@ if(guild.musicChannel){
        return message.channel.send("Please enter a channel.")
       }
       if(!servers[message.guild.id]) servers[message.guild.id] = {
-        queue: []
+        queue: [],
+        toDelete: []
       }
       if(!loop[message.guild.id]) loop[message.guild.id] = {
         queue: []
@@ -82,12 +74,17 @@ if(guild.musicChannel){
       let playlistID 
       let test
       async function playingEmbed(){
+        if(server.toDelete[0]){
+          client.channels.cache.get(message.channel.id).messages.fetch(server.toDelete[0]).then(message => message.delete())
+        }
         const info = await ytdl.getInfo(server.queue[0]);
         const playingEmbed = new Discord.MessageEmbed()
         .setDescription(`Playing [${info.title}](${server.queue[0]})`)
-        message.channel.send(playingEmbed)/*.then(msg => {
-          msg.delete({ timeout: 15000 });
-        })*/
+        msg = await message.channel.send(playingEmbed)
+        server.toDelete.shift()
+        server.toDelete.push(msg.id)
+        
+        
       }
       async function queueingEmbed(){
         const info = await ytdl.getInfo(server.queue[0]);
@@ -108,7 +105,6 @@ if(guild.musicChannel){
           }else{
             test = 2
           }
-          console.log(test)
         });
       }
       if(ytpl.validateURL(args[0])){
@@ -119,7 +115,7 @@ if(guild.musicChannel){
           data = await getData(args[0])
           if(data.tracks){
             message.channel.send('Loading tracks <a:8527_discord_loading:734395335446888529>')
-            for(var i = 0; i <10 && i < data.tracks.total ; ++i){
+            for(var i = 0; i <20 && i < data.tracks.total ; ++i){
               name = data.tracks.items[i].track.name
               artist = data.tracks.items[i].track.artists[0].name
               search = name+" "+artist
@@ -127,7 +123,7 @@ if(guild.musicChannel){
               musicLink = await searchResult.items[0].link
               server.queue.push(musicLink);
               }
-              if( 10 < server.queue.lenght || data.tracks.total < server.queue.length){
+              if( 20 < server.queue.lenght || data.tracks.total < server.queue.length){
                 test = 1
              }else{
                test = 2
@@ -166,7 +162,6 @@ if(guild.musicChannel){
         })
       
        module.exports.Skip = function(guild){
-        if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
         var server = servers[guild];
         if(server.dispatcher) server.dispatcher.end();
     }

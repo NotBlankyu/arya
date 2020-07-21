@@ -100,7 +100,7 @@ if(guild.musicChannel){
               musicLink = await searchResult.items[0].link
               server.queue.push(musicLink);
               }
-              if(data.tracks.total<server.queue.length){
+              if( 10 < server.queue.lenght || data.tracks.total < server.queue.length){
                 test = 1
              }else{
                test = 2

@@ -30,23 +30,29 @@ if(guild.musicChannel){
         }else{
         server.dispatcher = connection.play(ytdl(server.queue[0]), {filter:"audioonly"},{highWaterMark: 1<<25});
         }
-        server.dispatcher.on("finish",function(){
+        server.dispatcher.on("finish",async function(){
           if(loopQueue.queue[0]){
             loopQueue.queue.push(loopQueue.queue[0])
             loopQueue.queue.shift()
             play(connection,message)
             if(!guild.toggle){
-              message.channel.send("Playing next song!").then(msg => {
-                msg.delete({ timeout: 5000 });
-              })
+              const info = await ytdl.getInfo(server.queue[0]);
+              const playingEmbed = new Discord.MessageEmbed()
+              .setDescription(`Playing [${info.title}](${server.queue[0]})`)
+              message.channel.send(playingEmbed)/*.then(msg => {
+                msg.delete({ timeout: 15000 });
+              })*/
             }
 
           }else if(server.queue[1]){
             server.queue.shift();
             if(!guild.toggle){
-              message.channel.send("Playing next song!").then(msg => {
-                msg.delete({ timeout: 5000 });
-              })
+              const info = await ytdl.getInfo(server.queue[0]);
+              const playingEmbed = new Discord.MessageEmbed()
+              .setDescription(`Playing [${info.title}](${server.queue[0]})`)
+              message.channel.send(playingEmbed)/*.then(msg => {
+                msg.delete({ timeout: 15000 });
+              }) */
             }
             play(connection, message);
           }else{
@@ -75,6 +81,22 @@ if(guild.musicChannel){
       const searchArgs = args.join("")
       let playlistID 
       let test
+      async function playingEmbed(){
+        const info = await ytdl.getInfo(server.queue[0]);
+        const playingEmbed = new Discord.MessageEmbed()
+        .setDescription(`Playing [${info.title}](${server.queue[0]})`)
+        message.channel.send(playingEmbed)/*.then(msg => {
+          msg.delete({ timeout: 15000 });
+        })*/
+      }
+      async function queueingEmbed(){
+        const info = await ytdl.getInfo(server.queue[0]);
+        const playingEmbed = new Discord.MessageEmbed()
+        .setDescription(`Added [${info.title}](${server.queue[0]}) to the queue!`)
+        message.channel.send(playingEmbed)/*.then(msg => {
+          msg.delete({ timeout: 15000 });
+        })*/
+      }
       async function addPlaylist(type){
         ytpl(playlistID, function(err, playlist) {
           if(err) throw err;
@@ -95,7 +117,6 @@ if(guild.musicChannel){
       }else if(!ytdl.validateURL(args[0])){
         try{
           data = await getData(args[0])
-          console.log(data)
           if(data.tracks){
             message.channel.send('Loading tracks <a:8527_discord_loading:734395335446888529>')
             for(var i = 0; i <10 && i < data.tracks.total ; ++i){
@@ -124,25 +145,22 @@ if(guild.musicChannel){
           console.log(err)
         }
         
-      }else{
-        
+      }else{  
         server.queue.push(args[0]);
       }
 
       if(!message.guild.voiceConnection) message.member.voice.channel.join().then(function(connection){
         if(!server.queue[1]){
         play(connection,message)    
-        message.channel.send("Playing!")
+        playingEmbed()
         }else if(2 == test){
           play(connection,message)    
         message.channel.send("Playing and added to the queue!")
         }else {
-          message.channel.send("Added to the queue!")
-          
+         queueingEmbed()
         }
        }).catch(err => 
         {
-          console.log(err)
           message.channel.send("An error happen please make sure i have the permissions to join!")
           server.queue.shift();  
         })

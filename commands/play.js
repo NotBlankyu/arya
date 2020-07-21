@@ -44,7 +44,9 @@ if(guild.musicChannel){
           }else if(server.queue[1]){
             server.queue.shift();
             if(!guild.toggle){
-              message.channel.send("Playing next song!")
+              message.channel.send("Playing next song!").then(msg => {
+                msg.delete({ timeout: 5000 });
+              })
             }
             play(connection, message);
           }else{
@@ -93,6 +95,7 @@ if(guild.musicChannel){
       }else if(!ytdl.validateURL(args[0])){
         try{
           data = await getData(args[0])
+          console.log(data)
           if(data.tracks){
             message.channel.send('Loading tracks <a:8527_discord_loading:734395335446888529>')
             for(var i = 0; i <10 && i < data.tracks.total ; ++i){
@@ -114,13 +117,15 @@ if(guild.musicChannel){
             server.queue.push(musicLink);
           }else{
         }
-        }catch{
+        }catch(err){
           searchResult = await ytsr(searchArgs);
           musicLink = searchResult.items[0].link
           server.queue.push(musicLink);
+          console.log(err)
         }
         
       }else{
+        
         server.queue.push(args[0]);
       }
 

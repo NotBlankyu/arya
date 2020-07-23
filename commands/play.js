@@ -41,6 +41,7 @@ if(guild.musicChannel){
 
           }else if(server.queue[1]){
             server.queue.shift();
+            server.queueNames.shift();
             if(!guild.toggle){
               playingEmbed()
             }
@@ -48,6 +49,7 @@ if(guild.musicChannel){
           }else{
             connection.disconnect();
             server.queue.shift();
+            server.queueNames.shift();
             server.toDelete = []
             message.channel.send("Finished the queue leaving the channel now.")
           }
@@ -63,7 +65,9 @@ if(guild.musicChannel){
       }
       if(!servers[message.guild.id]) servers[message.guild.id] = {
         queue: [],
-        toDelete: []
+        toDelete: [],
+        queueNames: [],
+        queuePage: []
       }
       if(!loop[message.guild.id]) loop[message.guild.id] = {
         queue: []
@@ -77,9 +81,8 @@ if(guild.musicChannel){
         if(server.toDelete[0]){
           client.channels.cache.get(message.channel.id).messages.fetch(server.toDelete[0]).then(message => message.delete())
         }
-        const info = await ytdl.getInfo(server.queue[0]);
         const playingEmbed = new Discord.MessageEmbed()
-        .setDescription(`Playing [${info.title}](${server.queue[0]})`)
+        .setDescription(`Playing [${server.queueNames[0]}](${server.queue[0]})`)
         msg = await message.channel.send(playingEmbed)
         server.toDelete.shift()
         server.toDelete.push(msg.id)
@@ -94,18 +97,25 @@ if(guild.musicChannel){
           msg.delete({ timeout: 15000 });
         })*/
       }
-      async function addPlaylist(type){
-        ytpl(playlistID, function(err, playlist) {
+      
+      function addPlaylist(type){
+         ytpl(playlistID, function(err, playlist) {
+           try{
           if(err) throw err;
-          for(var i = 0; i < playlist.total_items; ++i){
+          for(var i = 0; i <40 && i < playlist.total_items; ++i){
             server.queue.push(playlist.items[i].url);
+            server.queueNames.push(playlist.items[i].title)
           }
           if(playlist.total_items<server.queue.length){
              test = 1
           }else{
             test = 2
           }
+        }catch{
+          if(err) return message.channel.send("I can read this playlist.(Probably private)")
+        }
         });
+      
       }
       if(ytpl.validateURL(args[0])){
         playlistID = await ytpl.getPlaylistID(args[0])
@@ -121,6 +131,7 @@ if(guild.musicChannel){
               search = name+" "+artist
               searchResult = await ytsr(search);
               musicLink = await searchResult.items[0].link
+              server.queueNames.push(name)
               server.queue.push(musicLink);
               }
               if( 20 < server.queue.lenght || data.tracks.total < server.queue.length){
@@ -131,16 +142,20 @@ if(guild.musicChannel){
           }else if(data){
             searchResult = await ytsr(data.name+data.artists[0].name);
             musicLink = searchResult.items[0].link
+            server.queueNames.push(data.name)
             server.queue.push(musicLink);
           }else{
         }
         }catch(err){
           searchResult = await ytsr(searchArgs);
           musicLink = searchResult.items[0].link
+          server.queueNames.push(searchResult.items[0].name)
           server.queue.push(musicLink);
         }
         
       }else{  
+        info = await ytdl.getInfo(args[0])
+        server.queueNames.push(info.title) 
         server.queue.push(args[0]);
       }
 
@@ -169,19 +184,66 @@ if(guild.musicChannel){
           async function queue() {
           if(!server.queue[0])return message.channel.send('No queue right now')
           var queue =''
-          var msg = await message.channel.send(`Fetching queue info <a:8527_discord_loading:734395335446888529>`);
           for(var i = 0; i < server.queue.length; ++i){
-            const info = await ytdl.getInfo(server.queue[i]);
-            queue += `${i + 1}. [${info.title}](${server.queue[i]})\n`;
+            queue += `${i + 1}. [${server.queueNames[i]}](${server.queue[i]})\n`;
           }
+          const [first, ...rest] = Discord.Util.splitMessage(queue, { maxLength: 2048 })
           
-           const embed = new Discord.MessageEmbed()
+            const embed2 = new Discord.MessageEmbed()
             .setTitle('Music Queue')
-            .setDescription(`${queue}`)
-            msg.edit(embed)
+            .setDescription(`${first}`)
+            server.queuePage.push(embed2)
+          if (!rest.length) {
+            // Send just the embed with the first element from the array
+            return message.channel.send(embed2)
+          }
+          let i2 = 1;
+          
+          for (const text of rest) {
+            // Add new description to the base embed
+            embed3 = new Discord.MessageEmbed()
+            .setTitle('Music Queue')
+            .setDescription(`${text}`)
+            server.queuePage.push(embed3)
+          }
+          const filter1 = (reaction, user) => {
+            return reaction.emoji.name === '➡️' && user.id === message.author.id;
+          };
+          const filter2 = (reaction, user) => {
+            return reaction.emoji.name === '⬅️' && user.id === message.author.id;
+          }; 
+        
+        message.channel.send(server.queuePage[0]).then(msg => {
+          msg.react('➡️')
+          const collector1 = msg.createReactionCollector(filter1, { time: 30000 });
+          collector1.on('collect', (reaction, user) => {
+            i2 += 1
+            msg.edit(server.queuePage[i2])
+            msg.reactions.removeAll();
+            if(i2+1 == server.queuePage.length){
+              msg.react('⬅️')
+            }else{
+              msg.react('⬅️')
+              msg.react('➡️')
+            }
             
-        }
+        });
+        const collector2 = msg.createReactionCollector(filter2, { time: 30000 });
+          collector2.on('collect', (reaction, user) => {
+            i2 -= 1
+            msg.edit(server.queuePage[i2])
+            msg.reactions.removeAll();
+            if(i2==0){
+              msg.react('➡️')
+            }else{
+            msg.react('⬅️')
+            msg.react('➡️')
+          }
+        });
+        });
+      }
         queue(message);
+        
      
       }   
       module.exports.loopAll = function(message){
@@ -223,6 +285,7 @@ if(guild.musicChannel){
           try {
             if(message.guild.me.voice.channel){
               server.queue = []
+              server.queueNames = []
               loopQueue.queue = []
               server.dispatcher.end();
             }else{

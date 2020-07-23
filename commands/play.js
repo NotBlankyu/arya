@@ -149,7 +149,7 @@ if(guild.musicChannel){
         }catch(err){
           searchResult = await ytsr(searchArgs);
           musicLink = searchResult.items[0].link
-          server.queueNames.push(searchResult.items[0].name)
+          server.queueNames.push(searchResult.items[0].title)
           server.queue.push(musicLink);
         }
         
@@ -180,7 +180,7 @@ if(guild.musicChannel){
         if(server.dispatcher) server.dispatcher.end();
     }
        module.exports.queue = function(message){  
-        
+        var server = servers[message.guild.id];
           async function queue() {
           if(!server.queue[0])return message.channel.send('No queue right now')
           var queue =''

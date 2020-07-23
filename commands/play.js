@@ -76,7 +76,7 @@ if(guild.musicChannel){
       var loopQueue = loop[message.guild.id];
       const searchArgs = args.join("")
       let playlistID 
-      let test
+      var test
       async function playingEmbed(){
         if(server.toDelete[0]){
           client.channels.cache.get(message.channel.id).messages.fetch(server.toDelete[0]).then(message => message.delete())
@@ -90,9 +90,9 @@ if(guild.musicChannel){
         
       }
       async function queueingEmbed(){
-        const info = await ytdl.getInfo(server.queue[server.queue.length - 1]);
+        const name = server.queueNames[server.queueNames.length - 1];
         const playingEmbed = new Discord.MessageEmbed()
-        .setDescription(`Added [${info.title}](${server.queue[server.queue.length - 1]}) to the queue!`)
+        .setDescription(`Added [${name}](${server.queue[server.queue.length - 1]}) to the queue!`)
         message.channel.send(playingEmbed)/*.then(msg => {
           msg.delete({ timeout: 15000 });
         })*/
@@ -112,7 +112,7 @@ if(guild.musicChannel){
             test = 2
           }
         }catch{
-          if(err) return message.channel.send("I can read this playlist.(Probably private)")
+          if(err) return message.channel.send("I can't read this playlist.(Probably private)")
         }
         });
       
@@ -181,6 +181,7 @@ if(guild.musicChannel){
     }
        module.exports.queue = function(message){  
         var server = servers[message.guild.id];
+        server.queuePage = []
           async function queue() {
           if(!server.queue[0])return message.channel.send('No queue right now')
           var queue =''
@@ -197,7 +198,7 @@ if(guild.musicChannel){
             // Send just the embed with the first element from the array
             return message.channel.send(embed2)
           }
-          let i2 = 1;
+          let i2 = 0;
           
           for (const text of rest) {
             // Add new description to the base embed
@@ -206,6 +207,7 @@ if(guild.musicChannel){
             .setDescription(`${text}`)
             server.queuePage.push(embed3)
           }
+          
           const filter1 = (reaction, user) => {
             return reaction.emoji.name === '➡️' && user.id === message.author.id;
           };

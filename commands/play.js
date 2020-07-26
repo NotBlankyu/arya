@@ -12,6 +12,7 @@ module.exports.run = async (client, message, args) => {
   }, (err, guild) => {
     if(err) console.log(err);
 })
+if(guild){
 if(guild.musicChannel){
   if(message.channel.id != guild.musicChannel){
     if(guild.musicChannel != "0" ){
@@ -20,6 +21,7 @@ if(guild.musicChannel){
     
   }
 
+}
 }
     function play(connection, message){
         

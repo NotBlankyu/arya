@@ -173,6 +173,7 @@ if(guild.musicChannel){
         }
        }).catch(err => 
         {
+          console.log(err)
           message.channel.send("An error happen please make sure i have the permissions to join!")
           server.queue.shift();  
         })

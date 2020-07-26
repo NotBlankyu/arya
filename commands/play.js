@@ -207,7 +207,6 @@ if(guild.musicChannel){
             .setDescription(`${text}`)
             server.queuePage.push(embed3)
           }
-          
           const filter1 = (reaction, user) => {
             return reaction.emoji.name === '➡️' && user.id === message.author.id;
           };

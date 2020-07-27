@@ -132,7 +132,12 @@ if(guild.musicChannel){
               artist = data.tracks.items[i].track.artists[0].name
               search = name+" "+artist
               searchResult = await ytsr(search);
-              musicLink = await searchResult.items[0].link
+              try {
+                musicLink = await searchResult.items[0].link
+              } catch(err){
+                console.log(err)
+                message.channel.send('An error happen while getting the music please try again.')
+              }
               server.queueNames.push(name)
               server.queue.push(musicLink);
               }
@@ -142,10 +147,16 @@ if(guild.musicChannel){
                test = 2
              }
           }else if(data){
-            searchResult = await ytsr(data.name+data.artists[0].name);
-            musicLink = searchResult.items[0].link
-            server.queueNames.push(data.name)
-            server.queue.push(musicLink);
+            searchResult = await ytsr(data.name+" "+data.artists[0].name);
+            try {
+              musicLink = await searchResult.items[0].link
+              server.queueNames.push(data.name)
+              server.queue.push(musicLink);
+            } catch(err){
+              console.log(err)
+              message.channel.send('An error happen while getting the music please try again.')
+            }
+            
           }else{
         }
         }catch(err){

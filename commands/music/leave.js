@@ -1,8 +1,14 @@
 const Discord = require("discord.js");
 const ytdl = require('ytdl-core');
 const music = require('./play.js')
-const Guild = require('../models/guild');
-module.exports.run = async (client, message, args) => {
+const Guild = require('../../models/guild');
+module.exports={
+  name: 'leave',
+      category: 'Music',
+      description: 'Clears queue and leave VC',
+      usage: `a/leave`,
+  
+  run : async (client, message, args) => {
   let guild = await Guild.findOne({ 
     guildID: message.guild.id
   }, (err, guild) => {
@@ -27,3 +33,4 @@ if(guild.musicChannel){
       
        
   }
+}

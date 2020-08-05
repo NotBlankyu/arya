@@ -1,7 +1,13 @@
 const Discord = require('discord.js')
 
 
-module.exports.run = async (client, message, args) => {
+module.exports={
+	name: 'invite',
+		category: 'info',
+		description: 'Invite me to your server',
+		usage: `a/invite`,
+	
+	run : async (client, message, args) => {
     const Embed = new Discord.MessageEmbed()
 	.setColor('#0099ff')
 	.setTitle('Invite me!')
@@ -11,5 +17,5 @@ module.exports.run = async (client, message, args) => {
 
 	message.channel.send(Embed);
   }
-
+}
 

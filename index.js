@@ -1,68 +1,38 @@
 
-const { Client } = require("discord.js")
+const { Client, Collection } = require('discord.js');
 const mongoose = require('mongoose');
 const Guild = require('./models/guild');
 const Discord = require("discord.js")
-const client = new Discord.Client()
-require('dotenv').config()
-const prefix = process.env.PREFIX
-  client.on('message', message => {
-    if (message.author.bot) return;
-    if (message.channel.type == 'dm') return;
-    if (message.content.startsWith(`<@!${client.user.id}>`) || message.content.startsWith(`<@${client.user.id}>`)) return message.channel.send('Hi my prefix is a/');
-    if (!message.content.toLowerCase().startsWith(prefix)) return; 
+const client = new Client();
+const { config } = require('dotenv');
+const fs = require('fs');
+const nodemon = require('nodemon');
 
-   const args = message.content
-       .trim().slice(prefix.length)
-       .split(/ +/g);
-   const command = args.shift().toLowerCase();
+client.commands = new Collection();
+client.aliases = new Collection();
 
-   try {
-       const commandFile = require(`./commands/${command}.js`)
-       
-       commandFile.run(client, message, args);
-   } catch (err) {
-    message.channel.send("I can't find this command ``"+`${command}`+'``.')
-    console.log(err)
- }
-});
-client.on("ready", () => {
-  let activity = process.env.activityName
-  let type = process.env.activityType
-  client.user.setPresence(({
-    status: 'dnd',
-    activity: {
-        name: activity,
-        type: type,
-        url: 'https://www.twitch.tv/dh3_'
-    }
-}))
-  
-  
-console.log("Estou Online!")
-});
-client.on("guildCreate", guild => {
-guild = new Guild({
-  _id: mongoose.Types.ObjectId(),
-  guildID: guild.id,
-  guildName: guild.name,
+client.categories = fs.readdirSync('./commands/');
+
+
+config({
+  path: `${__dirname}/.env`
 });
 
-guild.save()
-.then(result => console.log(result))
-.catch(err => console.error(err));
-
-console.log('I have joined a new server!');
-
+['command'].forEach(handler => {
+  require(`./handlers/${handler}`)(client);
 });
-client.on("guildDelete", guild => {
-  Guild.findOneAndDelete({
-    guildID: guild.id
-}, (err, res) => {
-    if(err) console.error(err)
-    console.log('I have been removed from a server!');
-});
+
+fs.readdir('./events/', (err, files) => {
+  if (err) return console.error;
+  files.forEach(file => {
+      if (!file.endsWith('.js')) return;
+      const evt = require(`./events/${file}`);
+      let evtName = file.split('.')[0];
+      console.log(`Loaded event '${evtName}'`);
+      client.on(evtName, evt.bind(null, client));
   });
+});
+
 client.mongoose = require('./utils/mongoose');
 client.mongoose.init();
 client.login(process.env.TOKEN)

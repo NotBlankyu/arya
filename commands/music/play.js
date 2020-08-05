@@ -3,10 +3,17 @@ const ytsr = require('ytsr')
 const ytpl = require('arya-ytpl')
 const Discord = require('discord.js')
 var { getData } = require("spotify-url-info");
-const Guild = require('../models/guild');
+const Guild = require('../../models/guild');
 var servers = {}
 var loop = {}
-module.exports.run = async (client, message, args) => {
+module.exports={
+  name: 'play',
+      category: 'Music',
+      description: 'Plays a song.',
+      aliases: ['p'],
+      usage: `play <YTLink/SptfyLink/Query>`,
+  
+  run : async (client, message, args) => {
   let guild = await Guild.findOne({ 
     guildID: message.guild.id
   }, (err, guild) => {
@@ -313,6 +320,7 @@ if(guild.musicChannel){
           }
         
   }
+}
   module.exports.noQueue = function(message){  
 message.channel.send('No queue right now')
 

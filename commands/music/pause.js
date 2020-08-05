@@ -1,8 +1,14 @@
 const Discord = require("discord.js");
 const ytdl = require('ytdl-core');
 const music = require('./play.js')
-const Guild = require('../models/guild');
-module.exports.run = async (client, message, args) => {
+const Guild = require('../../models/guild');
+module.exports={
+  name: 'pause',
+      category: 'Music',
+      description: 'Pauses the music playing.',
+      usage: `a/pause`,
+  
+  run : async (client, message, args) => {
     let guild = await Guild.findOne({ 
         guildID: message.guild.id
       }, (err, guild) => {
@@ -25,3 +31,4 @@ module.exports.run = async (client, message, args) => {
        music.pause(message.guild.id);
        message.channel.send("Paused") 
   }
+}

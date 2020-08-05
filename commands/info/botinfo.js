@@ -1,6 +1,12 @@
 const Discord = require('discord.js')
 const moment = require("moment");
-module.exports.run = async (client, message, args) => {
+module.exports={
+    name: 'botinfo',
+        category: 'info',
+        description: 'Returns bot information',
+        usage: `a/botinfo`,
+    
+    run : async (client, message, args) => {
     let serverSize = client.guilds.cache.size
     let userSize = client.users.cache.size
     let channelsSize = client.channels.cache.size
@@ -17,4 +23,5 @@ module.exports.run = async (client, message, args) => {
     .addField('Latency:',apiPing)
     .addField('Owner','[             ]#8283')
     message.channel.send(embed)
+}
 }

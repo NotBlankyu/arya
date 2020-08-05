@@ -1,7 +1,13 @@
 const Discord = require("discord.js");
 const mongoose = require('mongoose');
-const Guild = require('../models/guild');
-module.exports.run = async (client, message, args) => {
+const Guild = require('../../models/guild');
+module.exports={
+  name: 'lock',
+      category: 'Config',
+      description: 'Block the command from working in other chats',
+      usage: `a/lock`,
+  
+  run : async (client, message, args) => {
     if(!message.member.hasPermission('MANAGE_CHANNELS'))return message.channel.send("You don't seem to have enough permissions")
     Guild.findOne({ 
         guildID: message.guild.id
@@ -26,5 +32,5 @@ module.exports.run = async (client, message, args) => {
 
 
 
-
+  }
 }

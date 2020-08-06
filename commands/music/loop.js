@@ -14,6 +14,7 @@ module.exports={
   }, (err, guild) => {
     if(err) console.log(err);
 })
+if(guild){
 if(guild.musicChannel){
   if(message.channel.id != guild.musicChannel){
     if(guild.musicChannel != "0" ){
@@ -21,6 +22,7 @@ if(guild.musicChannel){
     }   
   }
 
+}
 }
     switch (args[0]) {
         case "off" : music.loopOff(message)

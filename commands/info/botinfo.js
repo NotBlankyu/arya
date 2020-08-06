@@ -21,7 +21,7 @@ module.exports={
     .addField('Channels Count:',channelsSize)
     .addField('Created at:',creationDate)
     .addField('Latency:',apiPing)
-    .addField('Owner','[             ]#8283')
+    .addField('Owner','『　』#8283')
     message.channel.send(embed)
 }
 }

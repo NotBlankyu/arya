@@ -14,6 +14,7 @@ module.exports={
   }, (err, guild) => {
     if(err) console.log(err);
 })
+if(guild){
 if(guild.musicChannel){
   if(message.channel.id != guild.musicChannel){
     if(guild.musicChannel != "0" ){
@@ -21,7 +22,8 @@ if(guild.musicChannel){
     }
     
   }
-}       
+} 
+}      
       if(!message.member.voice.channel){
        return message.channel.send("Please enter a channel.")
       }

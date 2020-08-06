@@ -16,6 +16,7 @@ module.exports={
         if(err) console.log(err);
     })
     if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
+    if(guild){
     if(guild.musicChannel){
       if(message.channel.id != guild.musicChannel){
         if(guild.musicChannel != "0" ){
@@ -23,7 +24,7 @@ module.exports={
         }
         
       }
-    }  
+    } }
       if(!message.member.voice.channel){
        return message.channel.send("Please enter a channel.")
       }

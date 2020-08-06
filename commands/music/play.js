@@ -29,6 +29,8 @@ if(guild.musicChannel){
   }
 
 }
+}else{
+  return message.channel.send('Please wait while the server is added to the db\nIf the error still continues contact me in the suport server.')
 }
     function play(connection, message){
         

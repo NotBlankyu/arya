@@ -45,6 +45,8 @@ if(guild.musicChannel){
           if(loopQueue.queue[0]){
             loopQueue.queue.push(loopQueue.queue[0])
             loopQueue.queue.shift()
+            loopQueue.queueNames.push(loopQueue.queueNames[0])
+            loopQueue.queueNames.shift()
             play(connection,message)
             if(!guild.toggle){
               playingEmbed()
@@ -81,7 +83,8 @@ if(guild.musicChannel){
         queuePage: []
       }
       if(!loop[message.guild.id]) loop[message.guild.id] = {
-        queue: []
+        queue: [],
+        queueNames: []
       }
       var server = servers[message.guild.id];
       var loopQueue = loop[message.guild.id];
@@ -93,7 +96,12 @@ if(guild.musicChannel){
           client.channels.cache.get(message.channel.id).messages.fetch(server.toDelete[0]).then(message => message.delete())
         }
         const playingEmbed = new Discord.MessageEmbed()
-        .setDescription(`Playing [${server.queueNames[0]}](${server.queue[0]})`)
+        if(loopQueue.queue[0]){
+          playingEmbed.setDescription(`Playing [${loopQueue.queueNames[0]}](${loopQueue.queue[0]})`)
+        }else{
+          playingEmbed.setDescription(`Playing [${server.queueNames[0]}](${server.queue[0]})`)
+        }
+        
         msg = await message.channel.send(playingEmbed)
         server.toDelete.shift()
         server.toDelete.push(msg.id)
@@ -274,6 +282,7 @@ if(guild.musicChannel){
         if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
         function loopAll() { 
           loopQueue.queue = server.queue.slice()
+          loopQueue.queueNames = server.queueNames.slice()
           message.channel.send('Looping the entire queue')
         }
         loopAll()
@@ -282,6 +291,7 @@ if(guild.musicChannel){
           if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
           function loopSingle() { 
           loopQueue.queue.push(server.queue[0])
+          loopQueue.queueNames.push(server.queueNames[0])
           message.channel.send('Looping the current track')
           }
           loopSingle()
@@ -290,6 +300,7 @@ if(guild.musicChannel){
           if(message.member.voice.channel != message.guild.voice.channel)return message.channel.send('Your not in the same channel as me!')
           function loopOff() { 
           loopQueue.queue = []
+          loopQueue.queueNames = []
           message.channel.send('Loop off')
           }
           loopOff()
@@ -311,6 +322,7 @@ if(guild.musicChannel){
               server.queue = []
               server.queueNames = []
               loopQueue.queue = []
+              loopQueue.queueNames = []
               server.dispatcher.end();
             }else{
               

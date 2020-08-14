@@ -3,7 +3,7 @@ const Guild = require('../models/guild');
 const discord = require('discord.js');
 
 
-module.exports = async (client, member) => {
+module.exports = async (client, guild) => {
     Guild.findOneAndDelete({
         guildID: guild.id
     }, (err, res) => {

@@ -31,7 +31,7 @@ if(guild.musicChannel){
           break;
         case "all" : music.loopAll(message)
           break; 
-        default: message.channel.send('use !loop all/single/off')   
+        default: message.channel.send('use a/loop all/single/off')   
     }
   }
 }

@@ -3,7 +3,7 @@ const Guild = require('../models/guild');
 const discord = require('discord.js');
 
 
-module.exports = async (client, member) => {
+module.exports = async (client, guild) => {
     guild = new Guild({
         _id: mongoose.Types.ObjectId(),
         guildID: guild.id,

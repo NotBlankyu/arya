@@ -13,6 +13,7 @@
     "fs": "0.0.1-security",
     "moment": "^2.27.0",
     "mongoose": "^5.9.27",
+    "ms": "^2.1.2",
     "node-pre-gyp": "^0.15.0",
     "nodemon": "^2.0.4",
     "opusscript": "0.0.7",

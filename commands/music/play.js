@@ -2,6 +2,7 @@ const ytdl = require('ytdl-core');
 const ytsr = require('ytsr')
 const ytpl = require('arya-ytpl')
 const Discord = require('discord.js')
+const ms = require('ms')
 var { getData } = require("spotify-url-info");
 const Guild = require('../../models/guild');
 var servers = {}
@@ -332,6 +333,18 @@ if(guild.musicChannel){
             console.log(e)
           }
           }
+          module.exports.info = async function(msg){  
+            var server = servers[msg.guild.id];
+            if(server.queue[0]){
+              info = await ytdl.getBasicInfo(server.queue[0])
+              const infoEmbed = new Discord.MessageEmbed()
+              .setTitle('Video Info')
+              .setDescription(`**Name**: ${info.title}\n**Author**:${info.player_response.videoDetails.author}\n**Lenght**:${ms(info.length_seconds*1000)}\n**View Count**:${info.player_response.videoDetails.viewCount}\n**Like/Dislike**:${info.likes}/${info.dislikes}\n**Like Ratio**:${Math.round(((info.likes-info.dislikes)/info.likes)*100)}%`)
+              .setThumbnail(info.player_response.videoDetails.thumbnail.thumbnails[4].url)
+              .setURL(server.queue[0])
+              msg.channel.send(infoEmbed)
+            }
+            } 
         
   }
 }

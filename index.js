@@ -27,6 +27,7 @@ client.on("message", async (message) => {
   const serverQueue = queue.get(message.guild.id);
 
   if (message.content.startsWith(`${prefix}play`)) {
+    if(!args[1])return message.channel.send('Please specify a video')
     execute(message, serverQueue, client);
     return;
   } else if (message.content.startsWith(`${prefix}skip`)) {

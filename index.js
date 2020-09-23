@@ -23,6 +23,7 @@ client.once("disconnect", () => {
 client.on("message", async (message) => {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
+  const args = message.content.split(" ");
 
   const serverQueue = queue.get(message.guild.id);
 

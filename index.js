@@ -66,7 +66,7 @@ async function execute(message, serverQueue, client) {
   if(!ytdl.validateURL(args[1])){ //check if is a link, if not execute ytsr or ytpl
     try {
       playlistID = await ytpl.getPlaylistID(args[1])
-       await ytpl(playlistID).then(playlist => {
+       await ytpl(playlistID,[limit[Infinity]]).then(playlist => {
          console.log(playlist.items)
           for (let i = 0; i < playlist.total_items; i++) {
             if(playlist.items[i].duration){

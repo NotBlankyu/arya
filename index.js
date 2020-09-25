@@ -67,11 +67,15 @@ async function execute(message, serverQueue, client) {
     try {
       playlistID = await ytpl.getPlaylistID(args[1])
        await ytpl(playlistID).then(playlist => {
+         console.log(playlist.items)
           for (let i = 0; i < playlist.total_items; i++) {
-            playlistSongs.push({
-              title: playlist.items[i].title,
-              url: playlist.items[i].url_simple
-            })
+            if(playlist.items[i].duration){
+              playlistSongs.push({
+                title: playlist.items[i].title,
+                url: playlist.items[i].url_simple
+              })
+            }
+            
           }
         }).catch(err => {
             console.error(err);

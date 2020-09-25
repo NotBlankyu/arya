@@ -1,8 +1,14 @@
 const Discord = require("discord.js");
-const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core");
 const ytsr = require('ytsr')
 const ytpl = require('ytpl')
+const { config } = require('dotenv');
+
+config({
+  path: `${__dirname}/.env`
+});
+
+const prefix = process.env.prefix
 
 const client = new Discord.Client();
 
@@ -254,5 +260,5 @@ collector2.on('collect', (reaction, user) => {
 });
 }
 
-client.login(token);
+client.login(process.env.token);
 

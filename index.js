@@ -45,6 +45,8 @@ client.on("message", async (message) => {
     return;
   } else if (message.content.startsWith(`${prefix}queue`)) {
     queueList(message.guild,message)
+  } else if(message.content.startsWith(`${prefix}loop`)){
+    loop(message, serverQueue);
   } else {
     message.channel.send("You need to enter a valid command!");
   }
@@ -115,7 +117,8 @@ async function execute(message, serverQueue, client) {
       queueEmbeds: [],
       songs: [],
       volume: 5,
-      playing: true
+      playing: true,
+      looping: false
     };
 
     queue.set(message.guild.id, queueContruct);
@@ -171,7 +174,7 @@ function stop(message, serverQueue) {
   serverQueue.connection.dispatcher.end();
 }
 
-async function play(guild, song, message) {
+async function play(guild, song) {
   const serverQueue = queue.get(guild.id);
   if (!song) {
     serverQueue.voiceChannel.leave();
@@ -182,7 +185,12 @@ async function play(guild, song, message) {
   const dispatcher = serverQueue.connection
     .play(ytdl(song.url))
     .on("finish", () => {
-      serverQueue.songs.shift();
+      if(serverQueue.looping){
+        serverQueue.songs.push(song)
+        serverQueue.songs.shift();
+      }else{
+        serverQueue.songs.shift();
+      }
       play(guild, serverQueue.songs[0]);
     })
     .on("error", error => console.error(error));
@@ -258,6 +266,15 @@ collector2.on('collect', (reaction, user) => {
 }
 });
 });
+}
+function loop(message, serverQueue) {
+  if(serverQueue.looping){
+    serverQueue.looping = false
+    message.channel.send('Loop Off')
+  }else{
+    serverQueue.looping = true
+    message.channel.send('Currently looping')
+  }
 }
 
 client.login(process.env.token);

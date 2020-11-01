@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
-const ytsr = require('ytsr')
-const ytpl = require('ytpl')
+const ytsr = require('ytsr');
+const ytpl = require('ytpl');
+const moment = require('moment');
 const { config } = require('dotenv');
 
 config({
@@ -28,6 +29,7 @@ client.once("disconnect", () => {
 
 client.on("message", async (message) => {
   if (message.author.bot) return;
+  if (message.content.startsWith(`${client.user}`)||message.content.startsWith(`<@!${client.user.id}>`)) return message.channel.send(`Hi my name is arya and my prefix is **${process.env.PREFIX}**`);
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.split(" ");
 
@@ -47,7 +49,12 @@ client.on("message", async (message) => {
     queueList(message.guild,message)
   } else if(message.content.startsWith(`${prefix}loop`)){
     loop(message, serverQueue);
-  } else {
+  } else if(message.content.startsWith(`${prefix}help`)){
+    help(message);
+  } else if(message.content.startsWith(`${prefix}botinfo`)){
+    botinfo(message,client);
+  }
+   else {
     message.channel.send("You need to enter a valid command!");
   }
 });
@@ -275,6 +282,34 @@ function loop(message, serverQueue) {
     serverQueue.looping = true
     message.channel.send('Currently looping')
   }
+}
+
+function help(message) {
+  const helpEmbed = new Discord.MessageEmbed()
+    .setTitle('Help')
+    .setDescription('Here you can find every command available right now!\nIf you want more info go [here](https://arya-music.ml/)')
+    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo')
+message.channel.send(helpEmbed)
+
+}
+
+function botinfo(message,client) {
+  let serverSize = client.guilds.cache.size
+  let userSize = client.users.cache.size
+  let channelsSize = client.channels.cache.size
+  let creationDate = moment(client.user.createdAt).locale('en-gb').format('LLL')
+  const apiPing = Math.round(client.ws.ping);
+  const embed = new Discord.MessageEmbed()
+  .setTitle('BotInfo')
+  .setThumbnail(client.user.avatarURL())
+  .setDescription('Hi my name is arya')
+  .addField('Server Count:',serverSize)
+  .addField('User Count:',userSize)
+  .addField('Channels Count:',channelsSize)
+  .addField('Created at:',creationDate)
+  .addField('Latency:',apiPing)
+  .addField('Owner','『　』#8283')
+  message.channel.send(embed)
 }
 
 client.login(process.env.token);

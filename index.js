@@ -56,7 +56,9 @@ client.on("message", async (message) => {
     botinfo(message,client);
   } else if(message.content.startsWith(`${prefix}song`)){
     song(message.guild,message);
-  } 
+  }  else if(message.content.startsWith(`${prefix}clear`)){
+    clear(message.guild,message);
+  }
    else {
     message.channel.send("You need to enter a valid command!");
   }
@@ -85,7 +87,6 @@ async function execute(message, serverQueue, client) {
     try {
       playlistID = await ytpl.getPlaylistID(args[1])
        await ytpl(playlistID).then(playlist => {
-         console.log(playlist)
           for (let i = 0; i < playlist.estimatedItemCount && i < 100; i++) {
             if(playlist.items[i].duration){
               playlistSongs.push({
@@ -215,7 +216,7 @@ async function play(guild, song) {
 
 function queueList(guild,message) {
   const serverQueue = queue.get(guild.id);
-  if(!serverQueue.songs[0]){
+  if(!serverQueue){
     return message.channel.send("A queue doesn't exist in the moment.")
   }
   var queueText = ''
@@ -292,7 +293,7 @@ function help(message) {
   const helpEmbed = new Discord.MessageEmbed()
     .setTitle('Help')
     .setDescription('Here you can find every command available right now!\nIf you want more info go [here](https://arya-music.ml/)')
-    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo⠀⠀⠀⠀⠀⠀-song')
+    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo⠀⠀⠀⠀-song')
 message.channel.send(helpEmbed)
 
 }
@@ -325,7 +326,6 @@ async function song(guild,message) {
   songInfo = await ytdl.getInfo(serverQueue.songs[0].url);
 
 
-  console.log(songInfo.videoDetails.length)
   embed = new Discord.MessageEmbed()
   .setTitle("Song Playing")
   .setThumbnail(songInfo.videoDetails.thumbnails[3].url)
@@ -333,6 +333,17 @@ async function song(guild,message) {
   
 
   message.channel.send(embed)
+}
+
+function clear(guild,message) {
+  const serverQueue = queue.get(guild.id);
+  if(!serverQueue){
+    return message.channel.send("No songs playing.")
+  }
+  serverQueue.songs = [];
+  message.channel.send("Queue cleared!");
+  serverQueue.connection.dispatcher.end();
+
 }
 
 

@@ -292,7 +292,7 @@ function help(message) {
   const helpEmbed = new Discord.MessageEmbed()
     .setTitle('Help')
     .setDescription('Here you can find every command available right now!\nIf you want more info go [here](https://arya-music.ml/)')
-    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo')
+    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo⠀⠀⠀⠀⠀⠀-song')
 message.channel.send(helpEmbed)
 
 }

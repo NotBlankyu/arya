@@ -14,6 +14,7 @@
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
     "fluent-ffmpeg": "^2.1.2",
+    "humanize-duration": "^3.25.0",
     "moment": "^2.29.1",
     "ytdl-core": "^4.2.1",
     "ytpl": "^2.0.3",

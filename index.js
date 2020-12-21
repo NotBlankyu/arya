@@ -4,6 +4,7 @@ const ytsr = require('ytsr');
 const ytpl = require('ytpl');
 const moment = require('moment');
 const dotenv = require('dotenv');
+const humanizeDuration = require("humanize-duration");
 
 dotenv.config({
   path: `${__dirname}/.env`
@@ -53,6 +54,8 @@ client.on("message", async (message) => {
     help(message);
   } else if(message.content.startsWith(`${prefix}botinfo`)){
     botinfo(message,client);
+  } else if(message.content.startsWith(`${prefix}song`)){
+    song(message.guild,message);
   } 
    else {
     message.channel.send("You need to enter a valid command!");
@@ -312,6 +315,26 @@ function botinfo(message,client) {
   .addField('Owner','『　』#8283')
   message.channel.send(embed)
 }
+
+async function song(guild,message) {
+  function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
+  const serverQueue = queue.get(guild.id);
+  if(!serverQueue){
+    return message.channel.send("No song playing.")
+  }
+  songInfo = await ytdl.getInfo(serverQueue.songs[0].url);
+
+
+  console.log(songInfo.videoDetails.length)
+  embed = new Discord.MessageEmbed()
+  .setTitle("Song Playing")
+  .setThumbnail(songInfo.videoDetails.thumbnails[3].url)
+  .setDescription(`**Title:** ${songInfo.videoDetails.media.song}\n**Artist:** ${songInfo.videoDetails.media.artist}\n**Lenght:** ${humanizeDuration(songInfo.videoDetails.lengthSeconds*1000)}\n[Open in browser](${serverQueue.songs[0].url})`)
+  
+
+  message.channel.send(embed)
+}
+
 
 client.login(process.env.token);
 

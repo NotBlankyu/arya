@@ -3,9 +3,9 @@ const ytdl = require("ytdl-core");
 const ytsr = require('ytsr');
 const ytpl = require('ytpl');
 const moment = require('moment');
-const { config } = require('dotenv');
+const dotenv = require('dotenv');
 
-config({
+dotenv.config({
   path: `${__dirname}/.env`
 });
 
@@ -53,7 +53,7 @@ client.on("message", async (message) => {
     help(message);
   } else if(message.content.startsWith(`${prefix}botinfo`)){
     botinfo(message,client);
-  }
+  } 
    else {
     message.channel.send("You need to enter a valid command!");
   }
@@ -77,16 +77,17 @@ async function execute(message, serverQueue, client) {
   let songInfo = 0
   let playlistSongs = []
   let song
-  
+
   if(!ytdl.validateURL(args[1])){ //check if is a link, if not execute ytsr or ytpl
     try {
       playlistID = await ytpl.getPlaylistID(args[1])
        await ytpl(playlistID).then(playlist => {
-          for (let i = 0; i < playlist.total_items && i < 100; i++) {
+         console.log(playlist)
+          for (let i = 0; i < playlist.estimatedItemCount && i < 100; i++) {
             if(playlist.items[i].duration){
               playlistSongs.push({
                 title: playlist.items[i].title,
-                url: playlist.items[i].url_simple
+                url: playlist.items[i].shortUrl
               })
             }
             
@@ -95,9 +96,9 @@ async function execute(message, serverQueue, client) {
             console.error(err);
         });
     } catch (err) {
-      searchArgs = args.slice(0).join(' ')
+      searchArgs = args.slice(1).join(' ')
       searchResult = await ytsr(searchArgs);
-      musicLink = searchResult.items[0].link
+      musicLink = searchResult.items[0].url
       songInfo = await ytdl.getInfo(musicLink);
       song = {
         title: songInfo.videoDetails.title,

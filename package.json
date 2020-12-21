@@ -9,14 +9,14 @@
   "author": "blank",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
-    "discord.js": "^12.3.1",
+    "@discordjs/opus": "^0.3.3",
+    "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
     "fluent-ffmpeg": "^2.1.2",
     "moment": "^2.29.1",
-    "ytdl-core": "^4.0.2",
-    "ytpl": "^1.0.1",
-    "ytsr": "^1.0.1"
+    "ytdl-core": "^4.2.1",
+    "ytpl": "^2.0.3",
+    "ytsr": "^3.0.0"
   }
 }

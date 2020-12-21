@@ -56,8 +56,10 @@ client.on("message", async (message) => {
     botinfo(message,client);
   } else if(message.content.startsWith(`${prefix}song`)){
     song(message.guild,message);
-  }  else if(message.content.startsWith(`${prefix}clear`)){
+  } else if(message.content.startsWith(`${prefix}clear`)){
     clear(message.guild,message);
+  } else if(message.content.startsWith(`${prefix}remove`)){
+    remove(message.guild,message);
   }
    else {
     message.channel.send("You need to enter a valid command!");
@@ -343,6 +345,26 @@ function clear(guild,message) {
   serverQueue.songs = [];
   message.channel.send("Queue cleared!");
   serverQueue.connection.dispatcher.end();
+
+}
+
+function remove(guild,message) {
+  const serverQueue = queue.get(guild.id);
+  const args = message.content.split(" ");
+  if(!args[1]){
+    message.channel.send("Use a/remove (index of song)")
+  }
+
+  if(!serverQueue){
+    return message.channel.send("No songs playing.")
+  }
+  if(args[1]==1){
+    serverQueue.connection.dispatcher.end();
+  }else{
+    serverQueue.songs.splice(args[1]-1,1)
+  }
+
+  message.channel.send("Track removed!");
 
 }
 

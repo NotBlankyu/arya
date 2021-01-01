@@ -60,6 +60,8 @@ client.on("message", async (message) => {
     clear(message.guild,message);
   } else if(message.content.startsWith(`${prefix}remove`)){
     remove(message.guild,message);
+  } else if(message.content.startsWith(`${prefix}invite`)){
+    invite(message);
   }
    else {
     message.channel.send("You need to enter a valid command!");
@@ -295,7 +297,7 @@ function help(message) {
   const helpEmbed = new Discord.MessageEmbed()
     .setTitle('Help')
     .setDescription('Here you can find every command available right now!\nIf you want more info go [here](https://arya-music.ml/)')
-    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo⠀⠀⠀⠀-song')
+    .addField('Commands','-play⠀⠀⠀⠀     -queue\n-skip⠀⠀⠀⠀⠀⠀-loop\n-help⠀⠀⠀⠀⠀⠀-stop\n-botinfo⠀⠀⠀⠀-song\n-remove')
 message.channel.send(helpEmbed)
 
 }
@@ -366,6 +368,13 @@ function remove(guild,message) {
 
   message.channel.send("Track removed!");
 
+}
+
+function invite(message){
+  const embed = new Discord.MessageEmbed()
+  .setDescription("Hi click [here](https://discord.com/api/oauth2/authorize?client_id=705053632961446008&permissions=3196928&scope=bot) to invite me!")
+  
+  message.channel.send(embed)
 }
 
 

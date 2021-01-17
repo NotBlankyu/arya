@@ -17,7 +17,11 @@ const client = new Discord.Client();
 const queue = new Map();
 
 client.once("ready", () => {
+      client.user.setActivity('to your feelings', { type: 'LISTENING' })
+  .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
+  .catch(console.error);
   console.log("Ready!");
+
 });
 
 client.once("reconnecting", () => {
@@ -38,31 +42,42 @@ client.on("message", async (message) => {
 
   if (message.content.startsWith(`${prefix}play`)) {
     if(!args[1])return message.channel.send('Please specify a video')
-    execute(message, serverQueue, client);
-    return;
+      execute(message, serverQueue, client);
+      return;
   } else if (message.content.startsWith(`${prefix}skip`)) {
-    skip(message, serverQueue);
-    return;
+      skip(message, serverQueue);
+      return;
   } else if (message.content.startsWith(`${prefix}stop`)) {
-    stop(message, serverQueue);
-    return;
+      stop(message, serverQueue);
+      return;
   } else if (message.content.startsWith(`${prefix}queue`)) {
-    queueList(message.guild,message)
+      queueList(message.guild,message);
+      return;
   } else if(message.content.startsWith(`${prefix}loop`)){
-    loop(message, serverQueue);
+      loop(message, serverQueue);
+      return;
   } else if(message.content.startsWith(`${prefix}help`)){
-    help(message);
+      help(message);
+      return;
   } else if(message.content.startsWith(`${prefix}botinfo`)){
-    botinfo(message,client);
+      botinfo(message,client);
+      return;
   } else if(message.content.startsWith(`${prefix}song`)){
-    song(message.guild,message);
+      song(message.guild,message);
+      return;
   } else if(message.content.startsWith(`${prefix}clear`)){
-    clear(message.guild,message);
+      clear(message.guild,message);
+      return;
   } else if(message.content.startsWith(`${prefix}remove`)){
-    remove(message.guild,message);
+      remove(message.guild,message);
+      return;
   } else if(message.content.startsWith(`${prefix}invite`)){
-    invite(message);
-  }
+      invite(message);
+      return;
+  } else if(message.content.startsWith(`${prefix}status`)){
+      status(message, args);
+      return;
+}
    else {
     message.channel.send("You need to enter a valid command!");
   }
@@ -322,7 +337,6 @@ function botinfo(message,client) {
 }
 
 async function song(guild,message) {
-  function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
   const serverQueue = queue.get(guild.id);
   if(!serverQueue){
     return message.channel.send("No song playing.")
@@ -375,6 +389,14 @@ function invite(message){
   .setDescription("Hi click [here](https://discord.com/api/oauth2/authorize?client_id=705053632961446008&permissions=3196928&scope=bot) to invite me!")
   
   message.channel.send(embed)
+}
+
+function status(message,args){
+  if(message.member.id != "316999783782809600") return
+  const statusText = args.slice(1).join(' ')
+  client.user.setActivity(statusText, { type: 'LISTENING' })
+  .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
+  .catch(console.error);
 }
 
 

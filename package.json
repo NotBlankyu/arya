@@ -16,7 +16,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "humanize-duration": "^3.25.0",
     "moment": "^2.29.1",
-    "ytdl-core": "^4.2.1",
+    "ytdl-core": "^4.5.0",
     "ytpl": "^2.0.3",
     "ytsr": "^3.0.0"
   }

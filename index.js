@@ -229,7 +229,7 @@ async function play(guild, song) {
   if(serverQueue.msgToDel){
     serverQueue.textChannel.messages.fetch(serverQueue.msgToDel).then(message => message.delete())
   }
-  msg = await serverQueue.textChannel.send( new Discord.MessageEmbed().setDescription(`Start playing: **[${song.title}](${song.url})**`) );
+  msg = await serverQueue.textChannel.send( new Discord.MessageEmbed().setDescription(`Started playing: **[${song.title}](${song.url})**`) );
   serverQueue.msgToDel = msg.id
 }
 

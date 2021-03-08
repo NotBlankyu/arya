@@ -11,6 +11,7 @@ dotenv.config({
 });
 
 const prefix = process.env.prefix
+const owner_id = process.env.owner_id
 
 const client = new Discord.Client();
 
@@ -394,7 +395,7 @@ function invite(message){
 }
 
 function status(message,args){
-  if(message.member.id != "316999783782809600") return
+  if(message.member.id != owner_id) return
   const statusText = args.slice(1).join(' ')
   client.user.setActivity(statusText, { type: 'LISTENING' })
   .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))

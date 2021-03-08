@@ -40,47 +40,49 @@ client.on("message", async (message) => {
 
   const serverQueue = queue.get(message.guild.id);
 
-  if (message.content.startsWith(`${prefix}play`)) {
-    if(!args[1])return message.channel.send('Please specify a video')
+  switch(args[0]){
+    case `${prefix}play`:
+      if(!args[1])return message.channel.send('Please specify a video')
       execute(message, serverQueue, client);
-      return;
-  } else if (message.content.startsWith(`${prefix}skip`)) {
+      break;
+    case `${prefix}skip`:
       skip(message, serverQueue);
-      return;
-  } else if (message.content.startsWith(`${prefix}stop`)) {
+      break;
+    case `${prefix}stop`:
       stop(message, serverQueue);
-      return;
-  } else if (message.content.startsWith(`${prefix}queue`)) {
+      break;
+    case `${prefix}queue`:
       queueList(message.guild,message);
-      return;
-  } else if(message.content.startsWith(`${prefix}loop`)){
+      break;
+    case `${prefix}loop`:
       loop(message, serverQueue);
-      return;
-  } else if(message.content.startsWith(`${prefix}help`)){
+      break;
+    case `${prefix}help`:
       help(message);
-      return;
-  } else if(message.content.startsWith(`${prefix}botinfo`)){
+      break;
+    case `${prefix}botinfo`:
       botinfo(message,client);
-      return;
-  } else if(message.content.startsWith(`${prefix}song`)){
+      break;
+    case `${prefix}song`:
       song(message.guild,message);
-      return;
-  } else if(message.content.startsWith(`${prefix}clear`)){
+      break;
+    case `${prefix}clear`:
       clear(message.guild,message);
-      return;
-  } else if(message.content.startsWith(`${prefix}remove`)){
+      break;
+    case `${prefix}remove`:
       remove(message.guild,message);
-      return;
-  } else if(message.content.startsWith(`${prefix}invite`)){
+      break;
+    case `${prefix}invite`:
       invite(message);
-      return;
-  } else if(message.content.startsWith(`${prefix}status`)){
+      break;
+    case `${prefix}status`:
       status(message, args);
-      return;
-}
-   else {
-    message.channel.send("You need to enter a valid command!");
+      break;
+    default: 
+      message.channel.send("You need to enter a valid command!");
   }
+
+  
 });
 
 async function execute(message, serverQueue, client) {
